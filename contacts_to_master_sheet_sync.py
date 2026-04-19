@@ -145,11 +145,14 @@ def create_tab_with_template(service, company_name):
     response = service.spreadsheets().batchUpdate(spreadsheetId=SPREADSHEET_ID, body=batch_update_request).execute()
     sheet_id = response['replies'][0]['addSheet']['properties']['sheetId']
 
+    tmp = TEMPLATE_HEADER.copy()
+    tmp[1] = [company_name]
+
     service.spreadsheets().values().update(
         spreadsheetId=SPREADSHEET_ID,
         range=f"'{company_name}'!A1",
         valueInputOption="USER_ENTERED",
-        body={'values': TEMPLATE_HEADER}
+        body={'values': tmp}
     ).execute()
 
     # Apply Formatting (Batch Update)
